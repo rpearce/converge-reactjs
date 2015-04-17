@@ -82,7 +82,6 @@
 				<section>
 					<h2>Talk Notes</h2>
           <p>Since requiring/exporting modules and dependencies takes up too much space, I've omitted them from the presentation.</p>
-          <p>However, they naturally are included in the demo code.</p>
 				</section>
 				<section>
 					<h2>Talk Notes</h2>
@@ -551,7 +550,7 @@ Speakers = React.createClass
       div className: 'speakers',
         rows.map (row) -> Row(row: row)
     else
-      null
+      null # or a Loader
           </pre></code>
         </section>
 
@@ -602,7 +601,7 @@ Speaker = React.createClass
 Speakers = React.createClass
   getInitialState: ->
     speakers: []
-    selectedId: null
+    selectedId: -1 # or null, if you prefer
 
   render: ->
     # ...
@@ -659,7 +658,7 @@ Speaker = React.createClass
   _handleToggleClick: ->
     # b/c i don't have room for a proper if/else
     selectedId = @props.speaker.id
-    selectedId = null if @props.isSelected # reset!
+    selectedId = -1 if @props.isSelected # reset!
     @props.updateSelectedId(selectedId)
           </pre></code>
         </section>
@@ -698,6 +697,23 @@ React.render(Speakers(), div);
           <h2>Ship It and Pray...</h2>
           <img src="./images/ship.gif" />
 				</section>
+
+        <section>
+          <p>We won't go in to this, but it now is easy to add additional functionality, such as Search.</p>
+          <pre><code data-trim contenteditable class="coffeescript">
+Speakers = React.createClass
+  # ...
+  render: ->
+    div null,
+      Search()
+      @_renderRows()
+          </pre></code>
+          <p>and control the data via this main component.</p>
+        </section>
+
+        <section>
+          <p><em>Take a breath.</em></p>
+        </section>
 
         <section>
           <h2>Why</h2>
@@ -798,12 +814,6 @@ Speaker = React.createClass
     # ...
     @props.updateSelectedId(selectedId)
           </code></pre>
-        </section>
-
-        <section>
-          <h2>What that can soon look like</h2>
-          <img src="./images/react_flow_bad.png" />
-          <p><em>Image credit: Alexander Early</em></p>
         </section>
 
         <section>
