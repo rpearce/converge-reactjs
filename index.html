@@ -1,0 +1,912 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>reveal.js - The HTML Presentation Framework</title>
+
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Hakim El Hattab">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/black.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+    <style>
+      .is-faded { opacity: 0.2; }
+      .reveal section img { border: none; box-shadow: none; }
+      .reveal h1, .reveal h2, .reveal h3, .reveal h4, .reveal h5, .reveal h6 { text-transform: none; }
+      .reveal pre code { max-height: 600px; }
+      .row { font-size: 0; }
+      .size1of2 { width: 50%; font-size: 1rem; display: inline-block; vertical-align: top; }
+      .size1of3 { width: 33.333333%; font-size: 1rem; display: inline-block; vertical-align: top; }
+    </style>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+
+				<section>
+          <img src="./images/react_logo.png" width="200" />
+					<h2>React.js Basics</h2>
+          <h4>@RobertWPearce</h4>
+          <p>
+            robertwpearce.com/converge-reactjs
+            <br />
+            robertwpearce.com/converge-reactjs-demo
+          </p>
+				</section>
+
+        <section>
+          <h2>whoami</h2>
+          <ul>
+            <li>From Charleston, SC</li>
+            <li>Digital Nomad</li>
+            <li>Work at 100% remote company, Articulate (articulate.com)</li>
+            <li>Full-stack dev</li>
+            <li>Worked with React for almost a year</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Why You Should Listen</h2>
+          <p class="fragment">I've made more small mistakes than you.</p>
+          <img src="./images/wall.gif" />
+        </section>
+
+				<section>
+					<h2>Talk Notes</h2>
+          <p>Since requiring/exporting modules and dependencies takes up too much space, I've omitted them from the presentation.</p>
+          <p>However, they naturally are included in the demo code.</p>
+				</section>
+				<section>
+					<h2>Talk Notes</h2>
+          <p>
+            When you see
+            <pre><code data-trim contenteditable class="coffeescript">
+{div, ul, li, span} = React.DOM
+            </code></pre>
+            don't freak out. This is just a CoffeeScript way of assigning each of these to variables which represent, for example
+            <pre><code data-trim contenteditable class="coffeescript">
+React.DOM.div()
+React.DOM.ul()
+React.DOM.li()
+React.DOM.span()
+# etc
+            </code></pre>
+            <p>This lets you use div, ul, li and span without prefixing them with React.DOM.___</p>
+          </p>
+				</section>
+				<section>
+					<h2>Talk Notes</h2>
+          <p>There will not be Q&A at the end,<br />so ask questions as we go.</p>
+				</section>
+
+				<section>
+					<h2>The Problem</h2>
+          <p>Can't see ConvergeSE's speaker details without navigating to another page</p>
+				</section>
+
+				<section>
+          <img src="./images/speaker_index.jpg" />
+				</section>
+
+				<section>
+          <img src="./images/speaker_info.jpg" />
+				</section>
+
+				<section>
+					<h2>What We Want</h2>
+          <img src="./images/itunes.jpg" />
+				</section>
+
+				<section>
+					<h2>What We Want</h2>
+          <img src="./images/google-images.jpg" />
+				</section>
+
+				<section>
+					<h2>vanilla JS or jQuery</h2>
+          <p>We <em>could</em> use data selector finagling to hide/show information and divs accordingly, but this can get very ugly and difficult to maintain.</p>
+				</section>
+
+				<section>
+					<h2>vanilla JS or jQuery</h2>
+          <p>For example, we could</p>
+          <ul>
+            <li class="fragment">Save each bit of data in data-* attributes for each item</li>
+            <li class="fragment">onClick -> Calculate the offset top and height for an item</li>
+            <li class="fragment">Give it sufficient padding underneath</li>
+            <li class="fragment">Apply the offset top + height to an absolutely positioned div (100% width) containing the info</li>
+            <li class="fragment">Hope things don't explode</li>
+            <li class="fragment">Discover that our maths suck when there's already an info section on the page</li>
+            <li class="fragment">Start maintaining state somewhere</li>
+          </ul>
+				</section>
+
+				<section>
+					<h2>vanilla JS or jQuery</h2>
+          <p>or, we could</p>
+          <ul>
+            <li class="fragment">Determine an item's position on a "row"</li>
+            <li class="fragment">onClick -> Insert a DOM element at the end of said row</li>
+            <li class="fragment">Populate this DOM element with data obtained from data-* attributes (or a lookup in a variable via data-id?)</li>
+            <li class="fragment">Maintain state of what element is currently clicked</li>
+            <li class="fragment">Facepalm when we have to change the # of items per row</li>
+          </ul>
+				</section>
+
+        <section>
+          <blockquote>
+            "Verba movent, exempla trahunt."
+            <br />
+            <small>(Words move people, examples compel them.)</small>
+            <br />
+            &mdash; Latin Proverb
+          </blockquote>
+        </section>
+
+				<section>
+					<h2>First the How</h2>
+					<h3>Then the Why</h3>
+					<h4>Then the Future</h4>
+				</section>
+
+				<section>
+					<h2>How</h2>
+				</section>
+
+				<section>
+					<h2>Thinking in Components</h2>
+          <img src="./images/speaker_index.jpg" />
+				</section>
+
+				<section>
+					<h2>Thinking in Components</h2>
+          <img src="./images/speaker_index2.jpg" />
+				</section>
+
+				<section>
+					<h2>Thinking in Components</h2>
+          <img src="./images/speaker_index3.jpg" />
+				</section>
+
+				<section>
+					<h2>Thinking in Components</h2>
+          <img src="./images/speaker_index4.jpg" />
+				</section>
+
+				<section>
+          <h2>Speakers</h2>
+          <ul>
+            <li>Rows of Speakers (grouped every 4)</li>
+            <li>Info (conditionally added to a given Row)</li>
+          </ul>
+				</section>
+
+				<section>
+					<h2>Component Structure</h2>
+					<pre><code data-trim contenteditable class="nohighlight">
+Speakers
+  Row
+    Speaker
+    Speaker
+    Speaker
+    Speaker
+  Row
+    Speaker
+    Speaker
+    Speaker
+    Speaker
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Component Structure (selected)</h2>
+					<pre><code data-trim contenteditable class="nohighlight">
+Speakers
+  Row
+    Speaker
+    Speaker
+    Speaker
+    Speaker
+  Row
+    Speaker
+    Speaker (selected)
+    Speaker
+    Speaker
+    Info
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>What do we do first?</h2>
+          <ul>
+            <li>Group speakers data in to rows of 4</li>
+            <li>Map over each row item</li>
+            <li>Map over each speaker within a row</li>
+          </ul>
+				</section>
+
+				<section>
+					<h2>Proof of Concept (try #1)</h2>
+          <pre><code data-trim contenteditable class="coffeescript">
+# CoffeeScript
+speakersData = [{ id: 1, name: 'Emily' }, { id: 2, name: 'Lucy' }]
+
+Speakers = React.createClass
+          </code></pre>
+				</section>
+				<section>
+					<h2>Proof of Concept (try #1)</h2>
+          <pre><code data-trim contenteditable class="coffeescript">
+speakersData = [{ id: 1, name: 'Emily' }, { id: 2, name: 'Lucy' }]
+
+Speakers = React.createClass
+  render: ->
+          </code></pre>
+				</section>
+				<section>
+					<h2>Proof of Concept (try #1)</h2>
+          <pre><code data-trim contenteditable class="coffeescript">
+speakersData = [{ id: 1, name: 'Emily' }, { id: 2, name: 'Lucy' }]
+
+Speakers = React.createClass
+  render: ->
+    rows = _.chunk(speakersData, 4)
+          </code></pre>
+				</section>
+				<section>
+					<h2>Proof of Concept (try #1)</h2>
+          <pre><code data-trim contenteditable class="coffeescript">
+speakersData = [{ id: 1, name: 'Emily' }, { id: 2, name: 'Lucy' }]
+
+Speakers = React.createClass
+  render: ->
+    rows = _.chunk(speakersData, 4)
+    div className: 'speakers',
+          </code></pre>
+				</section>
+				<section>
+					<h2>Proof of Concept (try #1)</h2>
+          <pre><code data-trim contenteditable class="coffeescript">
+speakersData = [{ id: 1, name: 'Emily' }, { id: 2, name: 'Lucy' }]
+
+Speakers = React.createClass
+  render: ->
+    rows = _.chunk(speakersData, 4)
+    div className: 'speakers',
+      rows.map (row) ->
+          </code></pre>
+				</section>
+				<section>
+					<h2>Proof of Concept (try #1)</h2>
+          <pre><code data-trim contenteditable class="coffeescript">
+speakersData = [{ id: 1, name: 'Emily' }, { id: 2, name: 'Lucy' }]
+
+Speakers = React.createClass
+  render: ->
+    rows = _.chunk(speakersData, 4)
+    div className: 'speakers',
+      rows.map (row) ->
+        row.map (speaker) ->
+          </code></pre>
+				</section>
+				<section>
+					<h2>Proof of Concept (try #1)</h2>
+          <pre><code data-trim contenteditable class="coffeescript">
+speakersData = [{ id: 1, name: 'Emily' }, { id: 2, name: 'Lucy' }]
+
+Speakers = React.createClass
+  render: ->
+    rows = _.chunk(speakersData, 4)
+    div className: 'speakers',
+      rows.map (row) ->
+        row.map (speaker) ->
+          div className: 'speaker', speaker.name
+          </code></pre>
+				</section>
+
+        <section>
+          <img src="./images/nest_meh.jpg" />
+        </section>
+
+        <section>
+					<h2>Proof of Concept (try #2)</h2>
+          <pre><code data-trim contenteditable class="coffeescript">
+speakersData = [{ id: 1, name: 'Emily' }, { id: 2, name: 'Lucy' }]
+
+Speakers = React.createClass
+  render: ->
+    rows = _.chunk(speakersData, 4)
+    div className: 'speakers',
+      rows.map (row) ->
+        row.map (speaker) ->
+          div className: 'speaker', speaker.name
+          </code></pre>
+				</section>
+
+				<section>
+					<h2>Proof of Concept (try #2)</h2>
+          <pre><code data-trim contenteditable class="coffeescript">
+speakersData = [{ id: 1, name: 'Emily' }, { id: 2, name: 'Lucy' }]
+
+Speakers = React.createClass
+  render: ->
+    rows = _.chunk(speakersData, 4)
+    div className: 'speakers',
+      @_buildRows()
+
+  _buildRows: ->
+    rows.map (row) ->
+      row.map (speaker) ->
+        div className: 'speaker', speaker.name
+          </code></pre>
+				</section>
+				<section>
+					<h2>Proof of Concept (try #2)</h2>
+          <pre><code data-trim contenteditable class="coffeescript">
+speakersData = [{ id: 1, name: 'Emily' }, { id: 2, name: 'Lucy' }]
+
+Speakers = React.createClass
+  render: ->
+    rows = _.chunk(speakersData, 4)
+    div className: 'speakers',
+      @_buildRows()
+
+  _buildRows: ->
+    rows.map(@_buildSpeakers)
+
+  _buildSpeakers: (row) ->
+    row.map (speaker) ->
+      div className: 'speaker', speaker.name
+          </code></pre>
+				</section>
+
+        <section>
+          <img src="./images/doge.jpg" />
+        </section>
+
+				<section>
+					<h2>Proof of Concept (try #3)</h2>
+          <pre><code data-trim contenteditable class="coffeescript">
+speakersData = [{ id: 1, name: 'Emily' }, { id: 2, name: 'Lucy' }]
+
+Speakers = React.createClass
+  render: ->
+    rows = _.chunk(speakersData, 4)
+    div className: 'speakers',
+      rows.map (row) -> Row(row: row)
+          </pre></code>
+          <pre class="fragment"><code data-trim contenteditable class="coffeescript">
+Row = React.createClass
+  render: ->
+    div null, # render must return a React.DOM element or null
+      @props.row.map (speaker) -> Speaker(speaker: speaker)
+          </pre></code>
+          <pre class="fragment"><code data-trim contenteditable class="coffeescript">
+Speaker = React.createClass
+  render: ->
+    div className: 'speaker', @props.speaker.name
+          </code></pre>
+				</section>
+
+        <section>
+          <img src="./images/star-trek-nodding.gif" />
+          <p>Nice work!</p>
+          <p>Take a breath.</p>
+        </section>
+
+        <section>
+          <h2>Asynchronous Data Fetching</h2>
+        </section>
+
+        <section>
+          <pre><code data-trim contenteditable class="coffeescript">
+Speakers = React.createClass
+
+
+
+  render: ->
+    # ...
+          </pre></code>
+        </section>
+        <section>
+          <pre><code data-trim contenteditable class="coffeescript">
+Speakers = React.createClass
+  componentWillMount: ->
+    @_fetchSpeakers()
+
+  render: ->
+    # ...
+          </pre></code>
+        </section>
+        <section>
+          <pre><code data-trim contenteditable class="coffeescript">
+Speakers = React.createClass
+  componentWillMount: ->
+    @_fetchSpeakers()
+
+  render: ->
+    # ...
+
+  _fetchSpeakers: ->
+    SomeAjaxHelper
+      .get('speakers.json')
+      .then(@_onSuccess)
+
+  _onSuccess: (data) ->
+    # triggers a re-render
+    @setState(speakers: data)
+          </pre></code>
+        </section>
+        <section>
+          <pre><code data-trim contenteditable class="coffeescript">
+Speakers = React.createClass
+  componentWillMount: ->
+    @_fetchSpeakers()
+
+  render: ->
+    # what do you think happens here?
+    rows = _.chunk(@state.speakers, 4)
+    div className: 'speakers',
+      rows.map (row) -> Row(row: row)
+
+  _fetchSpeakers: ->
+    # ...
+
+  _onSuccess: (data) ->
+    @setState(speakers: data)
+          </pre></code>
+        </section>
+
+        <section>
+          <h2>React waits for no code.</h2>
+          <p>Speed is the name of the game.</p>
+          <p>React calls the render method unless specifically told not to.</p>
+          <p>
+            <em>
+              When there is no initial state nor inital speakers property,
+              @state (and thus, speakers) is undefined.
+            </em>
+          <p/>
+        </section>
+
+        <section>
+          <h2>We could do...</h2>
+          <pre><code data-trim contenteditable class="coffeescript">
+Speakers = React.createClass
+  componentWillMount: ->
+    @_fetchSpeakers()
+
+  render: ->
+    if @state and @state.speakers and @state.speakers.length > 0
+      rows = _.chunk(@state.speakers, 4)
+      div className: 'speakers',
+        rows.map (row) -> Row(row: row)
+    else
+      null
+
+  # ...
+          </pre></code>
+        </section>
+        <section>
+          <h2>or we could do...</h2>
+          <pre><code data-trim contenteditable class="coffeescript">
+Speakers = React.createClass
+  componentWillMount: ->
+    @_fetchSpeakers()
+
+  render: ->
+    if @state?.speakers?.length > 0
+      rows = _.chunk(@state.speakers, 4)
+      div className: 'speakers',
+        rows.map (row) -> Row(row: row)
+    else
+      null
+
+  # ...
+          </pre></code>
+        </section>
+        <section>
+          <h2>The Right Way™</h2>
+          <pre><code data-trim contenteditable class="coffeescript">
+Speakers = React.createClass
+  # With this we now have an initial bit of
+  # data for our speakers state.
+  getInitialState: ->
+    speakers: []
+
+  componentWillMount: ->
+    @_fetchSpeakers()
+
+  render: ->
+    if @state.speakers.length > 0
+      rows = _.chunk(@state.speakers, 4)
+      div className: 'speakers',
+        rows.map (row) -> Row(row: row)
+    else
+      null
+          </pre></code>
+        </section>
+
+        <section>
+          <h2>Building the Child Components</h2>
+        </section>
+
+        <section>
+          <h2>Row Component</h2>
+          <pre><code data-trim contenteditable class="coffeescript">
+Row = React.createClass
+  render: ->
+    div null,
+      @props.row.map (item) =>
+        Speaker(speaker: item)
+          </pre></code>
+        </section>
+
+        <section>
+          <h2>Speaker Component</h2>
+          <pre><code data-trim contenteditable class="coffeescript">
+Speaker = React.createClass
+  render: ->
+    div className: 'speaker',
+      img className: 'speaker__image', src: @props.speaker.image
+      div className: 'speaker__infoBox',
+        div className: 'speaker__info',
+          h3 className: 'speaker__name', @props.speaker.name
+          span null, @props.speaker.work
+          </pre></code>
+        </section>
+
+        <section>
+          <h2>Adding info toggling functionality</h2>
+        </section>
+
+        <section>
+          <h2>What do we need?</h2>
+          <ul>
+            <li>Keep track of currently selected item</li>
+            <li>Ability to insert the info at the end of a group</li>
+            <li>Click event that toggles the info for an item</li>
+          </ul>
+        </section>
+
+        <section>
+          <pre><code data-trim contenteditable class="coffeescript">
+Speakers = React.createClass
+  getInitialState: ->
+    speakers: []
+    selectedId: null
+
+  render: ->
+    # ...
+    rows.map (row) ->
+      Row(
+        row: row
+        selectedId: @state.selectedId
+        updateSelectedId: @_updateSelectedId
+      )
+
+  _updateSelectedId: (selectedId) ->
+    @setState(selectedId: selectedId)
+          </pre></code>
+        </section>
+
+        <section>
+          <pre><code data-trim contenteditable class="coffeescript">
+Row = React.createClass
+  render: ->
+    div null, @_buildRow()
+
+  _buildRow: ->
+    selectedItems = @_filterSelected()
+    rendered = @props.row.map (item) =>
+      Speaker(
+        isSelected: item.id is @props.selectedId
+        speaker: item
+        updateSelectedId: @props.updateSelectedId
+      )
+    if selectedItems.length > 0
+      rendered.push(Info(speaker: selectedItems[0]))
+    rendered
+
+  _filterSelected: ->
+    @props.row.filter (item) =>
+      item.id is @props.selectedId
+          </pre></code>
+        </section>
+
+        <section>
+          <pre><code data-trim contenteditable class="coffeescript">
+Speaker = React.createClass
+  render: ->
+    div className: 'speaker', onClick: @_handleToggleClick,
+      img className: 'speaker__image', src: @props.speaker.image
+      div className: 'speaker__infoBox',
+        div className: 'speaker__info',
+          h3 className: 'speaker__name', @props.speaker.name
+          span null, @props.speaker.work
+
+  # Determines selectedId value and
+  # triggers the callback function
+  # passed down from Speakers
+  _handleToggleClick: ->
+    # b/c i don't have room for a proper if/else
+    selectedId = @props.speaker.id
+    selectedId = null if @props.isSelected # reset!
+    @props.updateSelectedId(selectedId)
+          </pre></code>
+        </section>
+
+        <section>
+          <pre><code data-trim contenteditable class="coffeescript">
+Info = React.createClass
+  render: ->
+    div className: 'speakerInfo',
+      h3 null, @props.speaker.name
+      p null,
+        div null, @props.speaker.work
+        div null, @props.speaker.twitter
+      p null, @props.speaker.bio
+          </pre></code>
+        </section>
+
+				<section>
+					<h2>Rendering to the DOM</h2>
+					<pre><code data-trim contenteditable>
+// index.js
+
+var React = require('react');
+var Speakers = require('./Speakers.react');
+
+var div = document.createElement('div');
+document.body.insertBefore(div, document.body.firstChild);
+
+React.render(Speakers(), div);
+           //    |        |
+           // component  container
+					</code></pre>
+				</section>
+
+				<section>
+          <h2>Ship It and Pray...</h2>
+          <img src="./images/ship.gif" />
+				</section>
+
+        <section>
+          <h2>Why</h2>
+        </section>
+
+        <section>
+          <h2>Truth</h2>
+        </section>
+
+				<section>
+          <p>Maintaining state in web applications. How...?</p>
+				</section>
+
+        <section>
+          <p>In web applications, what has been the source of data truth since day one?</p>
+          <p class="fragment">The server.</p>
+        </section>
+
+        <section>
+          <img src="./images/off_and_on.gif" />
+        </section>
+
+        <section>
+          <p>Mutating the DOM never made sense to me.</p>
+          <p class="fragment">The solution?</p>
+        </section>
+
+        <section>
+          <img src="./images/all_the_things.jpg" />
+        </section>
+
+        <section>
+          <p>Isn't that expensive on browsers?</p>
+          <p class="fragment">Nope.</p>
+        </section>
+
+        <section>
+          <h2>Virtual DOM</h2>
+        </section>
+
+        <section>
+          <img src="./images/virtual_dom.png" />
+          <p><em>Image credit: Steven Hollidge</em></p>
+        </section>
+
+        <section>
+          <h2>Re-rendering subset (good)</h2>
+          <img src="./images/dirty.png" />
+          <p><em>Image credit: Christopher Chedeau</em></p>
+        </section>
+
+        <section>
+          <h2>Re-rendering subset (good)</h2>
+          <img src="./images/dirty_rendered.png" />
+          <p><em>Image credit: Christopher Chedeau</em></p>
+        </section>
+
+        <section>
+          <h2>but...</h2>
+          <img src="./images/react_flow_bad.png" />
+          <p><em>Image credit: Alexander Early</em></p>
+        </section>
+
+        <section>
+          <p>The previous image occurs when one component does not control all of the data for an application, or at least for a set of subcomponents.</p>
+        </section>
+
+        <section>
+          <p>It's very tempting to want to manage state inside the component that the state affects.</p>
+          <img class="fragment" src="./images/vader.gif" />
+        </section>
+
+        <section>
+          <h2>Remember this?</h2>
+          <pre><code data-trim contenteditable class="coffeescript">
+Speaker = React.createClass
+  render: ->
+    # ...
+    Row(updateSelectedId: @_updateSelectedId)
+
+  _updateSelectedId: (selectedId) ->
+    # ...
+          </code></pre>
+          <pre><code data-trim contenteditable class="coffeescript">
+Row = React.createClass
+  render: ->
+    # ...
+    Speaker(updateSelectedId: @_updateSelectedId)
+          </code></pre>
+          <pre><code data-trim contenteditable class="coffeescript">
+Speaker = React.createClass
+  render: ->
+    # ...
+    div className: 'speaker', onClick: @_handleClick
+      # ...
+
+  _handleClick: ->
+    # ...
+    @props.updateSelectedId(selectedId)
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>What that can soon look like</h2>
+          <img src="./images/react_flow_bad.png" />
+          <p><em>Image credit: Alexander Early</em></p>
+        </section>
+
+        <section>
+          <h2>Utilizing Events</h2>
+          <pre><code data-trim contenteditable class="coffeescript">
+Speaker = React.createClass
+  componentDidMount: ->
+    SpeakerEmitter.addSelectionChangeListener(@_updateSelectedId)
+
+  componentWillUnmount: ->
+    SpeakerEmitter.removeSelectionChangeListener(@_updateSelectedId)
+
+  render: ->
+    Row()
+
+  _updateSelectedId: (selectedId) ->
+    # ...
+          </code></pre>
+          <pre><code data-trim contenteditable class="coffeescript">
+Row = React.createClass
+  render: ->
+    Speaker()
+          </code></pre>
+          <pre><code data-trim contenteditable class="coffeescript">
+Speaker = React.createClass
+  render: ->
+    div className: 'speaker', onClick: @_handleClick
+
+  _handleClick: ->
+    SpeakerEmitter.emitSelectionChange(selectedId)
+          </code></pre>
+          </code></pre>
+        </section>
+
+        <section>
+          <img src="./images/react_flow_good.png" />
+          <p><em>Image credit: Alexander Early</em></p>
+        </section>
+
+        <section>
+          <h2>The Future</h2>
+        </section>
+
+        <section>
+          <h2>It's quite popular</h2>
+          <img src="./images/react-github.jpg" />
+        </section>
+
+        <section>
+          <h2>Client Side & Server-side</h2>
+          <p>You can compile React on the server and use the same templates for server-side rendering as you do for client-side.</p>
+        </section>
+
+        <section>
+          <h2>It's gone native</h2>
+          <img src="./images/react-native-github.jpg" />
+        </section>
+
+        <section>
+          <h2>They're Open Source Committed</h2>
+          <img height="600" src="./images/react-patent-grant.jpg" />
+        </section>
+
+        <section>
+          <h2>TL;DR</h2>
+          <p>
+            If your current JS framework/lib/stack makes you feel like<br/>
+            <img src="./images/pirates.gif" /><br />
+            give React a shot and see if if makes you feel like<br />
+            <img src="./images/snail.gif" />
+          </p>
+        </section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: false,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'none', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
